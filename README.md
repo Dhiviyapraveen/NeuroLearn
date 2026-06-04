@@ -419,12 +419,6 @@ NeuroLearn helps learners:
 
 ---
 
-# 📷 Screenshots
-
-_Add project screenshots here after implementation._
-
----
-
 # 👨‍💻 Author
 
 **Dhiviya Chandrasekaran**
