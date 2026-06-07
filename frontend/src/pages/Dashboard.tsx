@@ -1,141 +1,123 @@
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { Brain, Zap, Clock, TrendingUp, BookOpen, Target, Activity } from 'lucide-react';
-import { GlassCard } from '@/components/GlassCard';
-import { CognitiveStateBadge } from '@/components/CognitiveStateBadge';
-import { Progress } from '@/components/ui/progress';
-import { useBehaviorTracking } from '@/hooks/useBehaviorTracking';
 import { useNavigate } from 'react-router-dom';
+import { BarChart3, BookOpenText, CalendarCheck, Flame, ListChecks, Medal, Sparkles, Target } from 'lucide-react';
+import { GlassCard } from '@/components/GlassCard';
+import { Progress } from '@/components/ui/progress';
+import { analyticsApi, recommendationApi, taskApi } from '@/lib/api';
 
 interface Props {
   userName: string;
 }
 
 export default function Dashboard({ userName }: Props) {
-  const { trackingData, cognitiveState } = useBehaviorTracking();
   const navigate = useNavigate();
-  const [progressData, setProgressData] = useState([
-    { name: 'Neural Networks', pct: 75 },
-    { name: 'Machine Learning', pct: 45 },
-    { name: 'Deep Learning', pct: 20 },
-  ]);
+  const [taskSummary, setTaskSummary] = useState({ completed: 2, pending: 3, total: 5, completionPercentage: 40 });
+  const [analytics, setAnalytics] = useState<any>({
+    summary: {
+      learningHours: 10.1,
+      journalEntries: 6,
+      averageEvaluationScore: 8.1,
+      currentStreak: 5,
+      longestStreak: 12,
+      monthlyConsistency: 73,
+    },
+  });
+  const [recommendations, setRecommendations] = useState<any>({
+    reviseTopics: ['Method overriding', 'Dynamic binding'],
+    tomorrowGoals: ['Complete 3 tasks', 'Write journal with examples'],
+    recommendedStudyMinutes: 90,
+  });
 
   useEffect(() => {
-    const progressStored = localStorage.getItem('learningProgress');
-    if (progressStored) {
-      const parsed = JSON.parse(progressStored);
-      setProgressData([
-        { name: 'Neural Networks', pct: parsed['Neural Networks'] ?? 75 },
-        { name: 'Machine Learning', pct: parsed['Machine Learning'] ?? 45 },
-        { name: 'Deep Learning', pct: parsed['Deep Learning'] ?? 20 },
-      ]);
-    }
+    taskApi.todaySummary().then((res) => setTaskSummary(res.data)).catch(() => undefined);
+    analyticsApi.dashboard().then((res) => setAnalytics(res.data)).catch(() => undefined);
+    recommendationApi.list().then((res) => setRecommendations(res.data)).catch(() => undefined);
   }, []);
 
-  const stats = [
-    { label: 'Typing Speed', value: `${trackingData.typingSpeed} WPM`, icon: Zap, color: 'text-accent' },
-    { label: 'Focus Time', value: '2h 34m', icon: Clock, color: 'text-success' },
-    { label: 'Lessons Done', value: '12', icon: BookOpen, color: 'text-neon-purple' },
-    { label: 'Accuracy', value: '94%', icon: Target, color: 'text-neon-pink' },
-  ];
-
-  const recentActivity = [
-    { title: 'Completed: Intro to Neural Networks', time: '2h ago', type: 'complete' },
-    { title: 'Quiz: Machine Learning Basics', time: '4h ago', type: 'quiz' },
-    { title: 'Started: Deep Learning Fundamentals', time: '1d ago', type: 'start' },
+  const cards = [
+    { label: 'Completed Today', value: taskSummary.completed, icon: ListChecks, color: 'text-success' },
+    { label: 'Pending Tasks', value: taskSummary.pending, icon: Target, color: 'text-warning' },
+    { label: 'Current Streak', value: `${analytics.summary.currentStreak} days`, icon: Flame, color: 'text-primary' },
+    { label: 'Avg AI Score', value: `${analytics.summary.averageEvaluationScore}/10`, icon: Sparkles, color: 'text-accent' },
   ];
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
-      {/* Welcome */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+    <div className="mx-auto max-w-6xl space-y-6">
+      <div>
         <h1 className="text-3xl font-bold">
           Welcome back, <span className="text-gradient">{userName}</span>
         </h1>
-        <p className="text-muted-foreground mt-1">Here's your learning overview</p>
-      </motion.div>
+        <p className="mt-1 text-muted-foreground">
+          NeuroLearn keeps your daily learning plan, reflection, AI feedback, streaks, and progress in one place.
+        </p>
+      </div>
 
-      {/* Cognitive State */}
-      <GlassCard glow delay={0.1}>
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-              <Brain className="w-6 h-6 text-accent animate-brain-pulse" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Current Cognitive State</p>
-              <CognitiveStateBadge state={cognitiveState.state} />
-            </div>
-          </div>
-          <div className="text-sm text-muted-foreground max-w-sm">
-            <Activity className="w-4 h-4 inline mr-1" />
-            {cognitiveState.response.content}
-          </div>
-        </div>
-      </GlassCard>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, i) => (
-          <GlassCard key={stat.label} delay={0.15 + i * 0.05}>
+      <div className="grid gap-4 md:grid-cols-4">
+        {cards.map((card) => (
+          <GlassCard key={card.label}>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
-                <stat.icon className={`w-5 h-5 ${stat.color}`} />
-              </div>
+              <div className="rounded-lg bg-secondary p-2"><card.icon className={`h-5 w-5 ${card.color}`} /></div>
               <div>
-                <p className="text-2xl font-bold">{stat.value}</p>
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
+                <p className="text-2xl font-bold">{card.value}</p>
+                <p className="text-xs text-muted-foreground">{card.label}</p>
               </div>
             </div>
           </GlassCard>
         ))}
       </div>
 
-      {/* Progress & Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <GlassCard delay={0.3}>
-          <h3 className="font-semibold mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-primary" /> Learning Progress
-          </h3>
-          <div className="space-y-4">
-            {progressData.map((course) => (
-              <div key={course.name} className="space-y-1.5">
-                <div className="flex justify-between text-sm">
-                  <span>{course.name}</span>
-                  <span className="text-muted-foreground">{course.pct}%</span>
-                </div>
-                <Progress value={course.pct} className="h-2 bg-secondary" />
-              </div>
-            ))}
+      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <GlassCard glow>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold">Today’s Completion</h2>
+              <p className="text-sm text-muted-foreground">Finish planned tasks before writing your learning journal.</p>
+            </div>
+            <button onClick={() => navigate('/planner')} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Open Planner</button>
           </div>
-          <button
-            onClick={() => navigate('/learn')}
-            className="mt-4 text-sm text-primary hover:text-primary/80 transition-colors"
-          >
-            Continue Learning →
-          </button>
+          <Progress className="mt-5" value={taskSummary.completionPercentage} />
+          <p className="mt-2 text-sm text-muted-foreground">{taskSummary.completionPercentage}% complete</p>
         </GlassCard>
 
-        <GlassCard delay={0.35}>
-          <h3 className="font-semibold mb-4 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-primary" /> Recent Activity
-          </h3>
+        <GlassCard>
+          <h2 className="mb-3 text-lg font-semibold">Streak & Consistency</h2>
           <div className="space-y-3">
-            {recentActivity.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.1 }}
-                className="flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"
-              >
-                <span className="text-sm">{item.title}</span>
-                <span className="text-xs text-muted-foreground">{item.time}</span>
-              </motion.div>
-            ))}
+            <p className="flex items-center justify-between text-sm"><span>Longest streak</span><span>{analytics.summary.longestStreak} days</span></p>
+            <p className="flex items-center justify-between text-sm"><span>Monthly consistency</span><span>{analytics.summary.monthlyConsistency}%</span></p>
+            <p className="flex items-center justify-between text-sm"><span>Journal entries</span><span>{analytics.summary.journalEntries}</span></p>
           </div>
         </GlassCard>
       </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <GlassCard>
+          <BookOpenText className="mb-3 h-5 w-5 text-primary" />
+          <h2 className="font-semibold">Reflect</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Submit what you learned today and receive AI evaluation, concepts, feedback, and questions.</p>
+          <button onClick={() => navigate('/journal')} className="mt-4 text-sm text-primary">Open journal</button>
+        </GlassCard>
+        <GlassCard>
+          <BarChart3 className="mb-3 h-5 w-5 text-accent" />
+          <h2 className="font-semibold">Analyze</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Review learning hours, scores, consistency graphs, and weekly performance.</p>
+          <button onClick={() => navigate('/analytics')} className="mt-4 text-sm text-primary">View analytics</button>
+        </GlassCard>
+        <GlassCard>
+          <Medal className="mb-3 h-5 w-5 text-warning" />
+          <h2 className="font-semibold">Improve</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Revise {recommendations.reviseTopics?.[0] || 'weak topics'} and study {recommendations.recommendedStudyMinutes} minutes tomorrow.</p>
+          <button onClick={() => navigate('/recommendations')} className="mt-4 text-sm text-primary">See recommendations</button>
+        </GlassCard>
+      </div>
+
+      <GlassCard>
+        <h2 className="mb-4 flex items-center gap-2 font-semibold"><CalendarCheck className="h-4 w-4 text-primary" /> Tomorrow’s AI Goals</h2>
+        <div className="grid gap-3 md:grid-cols-3">
+          {(recommendations.tomorrowGoals || []).slice(0, 3).map((goal: string) => (
+            <div key={goal} className="rounded-lg border border-border bg-secondary/40 p-3 text-sm">{goal}</div>
+          ))}
+        </div>
+      </GlassCard>
     </div>
   );
 }

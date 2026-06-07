@@ -1,6 +1,5 @@
-import { LayoutDashboard, BookOpen, LogOut, Brain } from 'lucide-react';
+import { BarChart3, BookOpenText, CalendarCheck, ClipboardList, LayoutDashboard, Lightbulb, LogOut, Shield, UserCircle, Brain } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
-import { useLocation } from 'react-router-dom';
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, useSidebar,
@@ -8,7 +7,13 @@ import {
 
 const navItems = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-  { title: 'Learning', url: '/learn', icon: BookOpen },
+  { title: 'Planner', url: '/planner', icon: ClipboardList },
+  { title: 'Journal', url: '/journal', icon: BookOpenText },
+  { title: 'Analytics', url: '/analytics', icon: BarChart3 },
+  { title: 'Recommendations', url: '/recommendations', icon: Lightbulb },
+  { title: 'Calendar', url: '/calendar', icon: CalendarCheck },
+  { title: 'Profile', url: '/profile', icon: UserCircle },
+  { title: 'Admin', url: '/admin', icon: Shield },
 ];
 
 interface Props {
@@ -18,7 +23,6 @@ interface Props {
 export function AppSidebar({ onLogout }: Props) {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
-  const location = useLocation();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
@@ -26,7 +30,7 @@ export function AppSidebar({ onLogout }: Props) {
         <div className="flex items-center gap-3">
           <Brain className="w-8 h-8 text-accent animate-brain-pulse shrink-0" />
           {!collapsed && (
-            <span className="text-lg font-bold text-gradient">NeuroAdaptive</span>
+            <span className="text-lg font-bold text-gradient">NeuroLearn</span>
           )}
         </div>
       </SidebarHeader>

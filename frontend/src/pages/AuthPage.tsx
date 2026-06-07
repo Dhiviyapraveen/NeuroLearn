@@ -48,21 +48,36 @@ export default function AuthPage({ onLogin }: Props) {
     }
   };
 
+  const openDemo = () => {
+    onLogin('Demo Learner', 'demo@neurolearn.local', 'demo-token');
+    toast.success('Demo mode opened.');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background px-4">
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,hsl(var(--background))_0%,hsl(var(--card))_55%,hsl(190_38%_10%)_100%)]" />
+      <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] [background-size:48px_48px]" />
+      <div className="relative z-10 mr-10 hidden max-w-lg lg:block">
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-accent">Adaptive education platform</p>
+        <h1 className="mt-4 text-5xl font-bold leading-tight">NeuroLearn turns behavior signals into better study decisions.</h1>
+        <p className="mt-4 text-muted-foreground">
+          Track focus, detect confusion, recommend the next learning action, and prove progress with mastery evidence.
+        </p>
+        <div className="mt-8 grid grid-cols-3 gap-3 text-sm">
+          {['Cognitive state', 'Mastery map', 'Quiz remediation'].map((item) => (
+            <div key={item} className="rounded-lg border border-border bg-card/70 p-3">
+              {item}
+            </div>
+          ))}
+        </div>
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 w-full max-w-md mx-4"
+        className="relative z-10 w-full max-w-md"
       >
-        {/* Logo */}
         <div className="text-center mb-8">
           <motion.div
             animate={{ y: [0, -6, 0] }}
@@ -71,11 +86,10 @@ export default function AuthPage({ onLogin }: Props) {
           >
             <Brain className="w-8 h-8 text-primary" />
           </motion.div>
-          <h1 className="text-3xl font-bold text-gradient mb-2">NeuroAdaptive</h1>
-          <p className="text-muted-foreground text-sm">AI-Powered Adaptive Learning</p>
+          <h1 className="text-3xl font-bold text-gradient mb-2">NeuroLearn</h1>
+          <p className="text-muted-foreground text-sm">Behavior-aware learning, not static lessons.</p>
         </div>
 
-        {/* Form card */}
         <div className="glass rounded-2xl p-8">
           <div className="flex mb-6 rounded-lg bg-secondary p-1">
             {['Login', 'Register'].map((tab, i) => (
@@ -148,6 +162,14 @@ export default function AuthPage({ onLogin }: Props) {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </>
               )}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={openDemo}
+              className="w-full h-11"
+            >
+              Open HR Demo
             </Button>
           </form>
         </div>

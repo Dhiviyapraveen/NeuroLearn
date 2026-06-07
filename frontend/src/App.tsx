@@ -7,8 +7,13 @@ import { useAuth } from '@/hooks/useAuth';
 import { AppLayout } from '@/components/AppLayout';
 import AuthPage from '@/pages/AuthPage';
 import Dashboard from '@/pages/Dashboard';
-import LearningPage from '@/pages/LearningPage';
-import QuizPage from '@/pages/QuizPage';
+import PlannerPage from '@/pages/PlannerPage';
+import JournalPage from '@/pages/JournalPage';
+import AnalyticsPage from '@/pages/AnalyticsPage';
+import RecommendationsPage from '@/pages/RecommendationsPage';
+import CalendarPage from '@/pages/CalendarPage';
+import ProfilePage from '@/pages/ProfilePage';
+import AdminPage from '@/pages/AdminPage';
 import NotFound from '@/pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -37,8 +42,13 @@ function AppRoutes() {
     <AppLayout userName={user.name} onLogout={logout}>
       <Routes>
         <Route path="/dashboard" element={<Dashboard userName={user.name} />} />
-        <Route path="/learn" element={<LearningPage />} />
-        <Route path="/learn/quiz/:lessonId" element={<QuizPage />} />
+        <Route path="/planner" element={<PlannerPage />} />
+        <Route path="/journal" element={<JournalPage />} />
+        <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/recommendations" element={<RecommendationsPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/profile" element={<ProfilePage userName={user.name} />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/auth" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<NotFound />} />

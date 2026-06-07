@@ -2,13 +2,25 @@ export const getLearningContent = (req, res) => {
   const { level } = req.query;
 
   const contentMap = {
-    basic: "This is simple explanation",
-    intermediate: "This is moderate content",
-    advanced: "This is complex topic",
+    basic: {
+      title: "Core Concept",
+      objective: "Understand how adaptive learning changes content from behavior and progress.",
+      activity: "Explain why personalized content is better than one static lesson.",
+    },
+    intermediate: {
+      title: "Practice Skill",
+      objective: "Use behavior signals like typing, backspaces, idle time, and mouse movement.",
+      activity: "Describe how behavior tracking can support a learner before quiz failure.",
+    },
+    advanced: {
+      title: "Retention Review",
+      objective: "Optimize knowledge retention with recall checks, mastery progress, and review priority.",
+      activity: "Complete a retention check and update the learner progress state.",
+    },
   };
 
   res.json({
-    content: contentMap[level] || "Default content",
+    content: contentMap[level] || contentMap.basic,
   });
 };
 
@@ -20,26 +32,26 @@ export const analyzeCode = (req, res) => {
 
   const normalizedCode = code.toLowerCase();
   let score = 0;
-  if (normalizedCode.includes('function')) score += 1;
-  if (normalizedCode.includes('return')) score += 1;
-  if (normalizedCode.includes('if') || normalizedCode.includes('for') || normalizedCode.includes('while')) score += 1;
+  if (normalizedCode.length > 60) score += 1;
+  if (normalizedCode.includes('learner') || normalizedCode.includes('student')) score += 1;
+  if (normalizedCode.includes('progress') || normalizedCode.includes('content') || normalizedCode.includes('support')) score += 1;
 
-  let hint = 'Nice start. Add a return step and run through one example in comments.';
-  if (lessonId === 1 && normalizedCode.includes('neuron')) {
+  let hint = 'Nice start. Add one clear example of how the platform adapts to the learner.';
+  if (lessonId === 1 && (normalizedCode.includes('adaptive') || normalizedCode.includes('personal'))) {
     score += 1;
-    hint = 'Great neuron idea. Add activation logic and then test with sample inputs.';
+    hint = 'Good explanation. Add how the content changes when the learner is confused or focused.';
   }
-  if (lessonId === 2 && normalizedCode.includes('model')) {
+  if (lessonId === 2 && (normalizedCode.includes('behavior') || normalizedCode.includes('typing') || normalizedCode.includes('idle'))) {
     score += 1;
-    hint = 'You are on the right track for machine learning. Try adding a training loop next.';
+    hint = 'Good behavior-tracking point. Connect the signal to a specific support action.';
   }
-  if (lessonId === 3 && normalizedCode.includes('layer')) {
+  if (lessonId === 3 && (normalizedCode.includes('retention') || normalizedCode.includes('review') || normalizedCode.includes('recall'))) {
     score += 1;
-    hint = 'Good deep learning structure. Add a few stacked layers and use a simple activation.';
+    hint = 'Strong retention answer. Add how quiz evidence updates progress or review priority.';
   }
 
   if (score >= 3) {
-    hint = 'Great structure! Your code is promising. Keep adding a clear output example.';
+    hint = 'Great response. It clearly connects behavior, personalization, engagement, and retention.';
   }
 
   return res.json({

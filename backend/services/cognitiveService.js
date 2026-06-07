@@ -1,13 +1,17 @@
 export const analyzeCognitiveState = (data) => {
   const { typingSpeed, backspaceCount, pauseTime, mouseSpeed } = data;
 
-  if (pauseTime > 10 || backspaceCount > 15) {
+  if (pauseTime > 18 || (mouseSpeed > 800 && typingSpeed < 10)) {
     return "distracted";
   }
 
-  if (typingSpeed > 35 && backspaceCount < 5 && mouseSpeed > 10) {
+  if (backspaceCount > 12 || (typingSpeed > 0 && typingSpeed < 18)) {
+    return "confused";
+  }
+
+  if (typingSpeed > 35 && backspaceCount < 6 && pauseTime < 8) {
     return "focused";
   }
 
-  return "confused";
+  return "focused";
 };

@@ -1,15 +1,15 @@
 export const getAdaptiveResponse = (state) => {
   switch (state) {
     case "confused":
-      return { action: "simplify", content: "Review the last concept with an example." };
+      return { action: "simplify", content: "Switch to a worked example, then ask for one active-recall answer." };
 
     case "focused":
-      return { action: "challenge", content: "Try a harder question to deepen understanding." };
+      return { action: "challenge", content: "Focus is strong. Offer a transfer challenge instead of more reading." };
 
     case "distracted":
-      return { action: "engage", content: "Take a short active recall task to regain focus." };
+      return { action: "engage", content: "Use a 90-second reset task before continuing the lesson." };
 
     default:
-      return { action: "assist", content: "Keep going—you’re doing well." };
+      return { action: "assist", content: "Keep the learner in flow with a short checkpoint." };
   }
 };

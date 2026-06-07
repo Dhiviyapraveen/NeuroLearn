@@ -1,9 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Lightbulb, Sparkles, BookOpen, Code, ChevronRight } from 'lucide-react';
+import {
+  Brain,
+  CheckCircle2,
+  ChevronRight,
+  ClipboardCheck,
+  Code,
+  Lightbulb,
+  ListChecks,
+  Sparkles,
+  TimerReset,
+} from 'lucide-react';
 import { GlassCard } from '@/components/GlassCard';
-import { CognitiveStateBadge } from '@/components/CognitiveStateBadge';
 import { useBehaviorTracking } from '@/hooks/useBehaviorTracking';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -13,59 +22,59 @@ import { learningApi } from '@/lib/api';
 export const lessons = [
   {
     id: 1,
-    title: 'Neural Networks',
+    title: 'Core Concept',
+    progressKey: 'Core Concept',
     level: 'basic' as const,
-    content: `Neural Networks are computational models inspired by the human brain. They are used to recognize patterns and make decisions from data.\n\nA neural network consists of three main layers:\n\n1. Input Layer\n   This layer receives data such as numbers, text, or images.\n\n2. Hidden Layers\n   These layers process the data using weights and activation functions. They help in identifying patterns.\n\n3. Output Layer\n   This layer produces the final result such as classification or prediction.\n\nWorking Process:\n* Input data is passed into the network\n* Each neuron multiplies inputs with weights\n* The result is passed through an activation function\n* Output is generated\n* Error is calculated and corrected using backpropagation\n\nKey Idea:\nNeural networks learn by adjusting weights to reduce error.\n\nExample:\nUsed in image recognition, handwriting detection, and basic AI systems.\n\nCode Concept:\nfunction neuron(inputs, weights) {\n  let sum = 0;\n  for (let i = 0; i < inputs.length; i++) {\n    sum += inputs[i] * weights[i];\n  }\n  return sum;\n}\n`,
-    simplified: 'Neural networks learn by adjusting weights to reduce prediction error.',
+    outcome: 'Learn the main idea with content that can become simpler or harder based on engagement.',
+    content: `Purpose\nThis screen demonstrates the main feature of the project: personalized study content. The learner is not given the same static material every time. Their behavior and progress decide what support appears next.\n\nStudy Content\nKnowledge retention improves when learners first understand the core idea, then recall it without help, then revisit it after time has passed.\n\nCore Idea\nAdaptive learning means the platform observes how a learner is working and changes the experience. If the learner is focused, the platform can give a challenge. If the learner appears confused, it can simplify the explanation. If the learner is idle or distracted, it can give a short reset or recall task.\n\nHow This App Uses It\n1. Tracks behavior while the learner reads and types.\n2. Detects cognitive state from behavior signals.\n3. Shows a personalized hint, simplified explanation, quiz, or challenge.\n4. Updates progress after a retention check.\n\nMini Task\nWrite one sentence explaining why adaptive content is better than the same lesson for every learner.`,
+    simplified: 'The platform watches learning behavior and changes the content so the learner gets the right help at the right time.',
+    retrieval: 'What are the four main steps of this adaptive learning flow?',
+    challenge: 'Explain how the app should react when a learner is focused versus confused.',
+    misconception: 'Personalized learning is not just showing easier content. It can also give challenges, recall tasks, and review.',
     quiz: [
-      { question: 'What does Input Layer do?', options: ['Receives data', 'Predicts output', 'Updates weights'], answer: 'Receives data' },
-      { question: 'Hidden Layers use?', options: ['Weights and activation', 'File system', 'Networking'], answer: 'Weights and activation' },
-      { question: 'Output layer gives?', options: ['Final result', 'Data input', 'Loss value'], answer: 'Final result' },
-      { question: 'Which step corrects error?', options: ['Backpropagation', 'Activation', 'Input'], answer: 'Backpropagation' },
-      { question: 'Neural networks are inspired by?', options: ['Human brain', 'Cars', 'Libraries'], answer: 'Human brain' },
-      { question: 'What is adjusted to reduce error?', options: ['Weights', 'Inputs', 'Outputs'], answer: 'Weights' },
-      { question: 'Which function introduces non-linearity?', options: ['Activation function', 'Sum function', 'Row function'], answer: 'Activation function' },
-      { question: 'Example application is?', options: ['Handwriting detection', 'Cooking', 'Driving'], answer: 'Handwriting detection' },
-      { question: 'Neurons compute?', options: ['Weighted sum', 'Sort operations', 'Print statements'], answer: 'Weighted sum' },
-      { question: 'Final output is for?', options: ['Classification or prediction', 'Deleting files', 'Browsing'], answer: 'Classification or prediction' },
+      { question: 'What does adaptive learning change?', options: ['Content and support', 'Only the logo', 'Only the password'], answer: 'Content and support' },
+      { question: 'What should happen when a learner is confused?', options: ['Simplify or give a hint', 'Hide the lesson', 'Ignore behavior'], answer: 'Simplify or give a hint' },
+      { question: 'What should happen when a learner is focused?', options: ['Give a challenge', 'Stop tracking progress', 'Repeat login'], answer: 'Give a challenge' },
+      { question: 'Which action helps retention?', options: ['Recall and review', 'Skipping feedback', 'Random navigation'], answer: 'Recall and review' },
+      { question: 'What makes the platform different from static lessons?', options: ['It reacts to learner signals', 'It uses fixed text only', 'It has no progress'], answer: 'It reacts to learner signals' },
     ],
   },
   {
     id: 2,
-    title: 'Machine Learning',
+    title: 'Practice Skill',
+    progressKey: 'Practice Skill',
     level: 'intermediate' as const,
-    content: `Machine Learning is a technique where systems learn from data and improve performance without being explicitly programmed.\n\nTypes of Machine Learning:\n\n1. Supervised Learning\n   The model is trained using labeled data.\n   Example: Spam detection\n\n2. Unsupervised Learning\n   The model finds patterns in unlabeled data.\n   Example: Customer segmentation\n\n3. Reinforcement Learning\n   The model learns using rewards and penalties.\n   Example: Game AI\n\nWorking Process:\n* Collect data\n* Clean and preprocess data\n* Train the model\n* Test accuracy\n* Make predictions\n\nKey Idea:\nMachine learning identifies patterns and uses them to make decisions.\n\nExample:\nUsed in recommendation systems, fraud detection, and chatbots.\n\nCode Concept:\nfunction trainModel(data) {\n  let model = {};\n  data.forEach(item => {\n    model[item.input] = item.output;\n  });\n  return model;\n}\n`,
-    simplified: 'Machine learning uses data to train models that make predictions for new inputs.',
+    outcome: 'Practice the concept while the app monitors behavior and adjusts support.',
+    content: `Purpose\nThis module demonstrates behavior tracking. While the learner types, moves the mouse, pauses, or deletes text, the platform converts those actions into useful engagement signals.\n\nTracked Behavior\nTyping speed can suggest flow or hesitation.\nBackspace count can suggest uncertainty.\nIdle time can suggest distraction or overload.\nMouse movement can suggest activity level.\n\nWhy It Matters\nA normal education website only checks final answers. This platform also studies the learning process. That makes it possible to support the learner before they fail a quiz.\n\nPersonalized Response\nFocused learner: show a harder practice task.\nConfused learner: show simpler wording and a hint.\nDistracted learner: give a short recall task to regain attention.\n\nMini Task\nType a short answer in the response box. Pause, edit, or continue typing and watch the live behavior metrics change.`,
+    simplified: 'The app tracks how the learner studies, not only whether the final answer is correct.',
+    retrieval: 'Name two behavior signals tracked by this platform.',
+    challenge: 'Describe one way behavior tracking can help a struggling learner earlier.',
+    misconception: 'Behavior tracking is not for judging the learner. It is used to choose better support.',
     quiz: [
-      { question: 'Supervised learning uses?', options: ['Labeled data', 'Unlabeled data', 'Only rules'], answer: 'Labeled data' },
-      { question: 'Unsupervised finds?', options: ['Patterns', 'Labels', 'Errors'], answer: 'Patterns' },
-      { question: 'Reinforcement uses?', options: ['Rewards and penalties', 'Random choice', 'Manual code'], answer: 'Rewards and penalties' },
-      { question: 'First step is?', options: ['Collect data', 'Train model', 'Test accuracy'], answer: 'Collect data' },
-      { question: 'Data clean step is called?', options: ['Preprocess', 'Output', 'Compile'], answer: 'Preprocess' },
-      { question: 'Model evaluation checks?', options: ['Accuracy', 'Weight size', 'Color'], answer: 'Accuracy' },
-      { question: 'Example of ML application?', options: ['Fraud detection', 'CSS layout', 'File system'], answer: 'Fraud detection' },
-      { question: 'Training uses?', options: ['Data', 'Manual features', 'No input'], answer: 'Data' },
-      { question: 'Make predictions after?', options: ['Testing', 'Collecting', 'Deleting'], answer: 'Testing' },
-      { question: 'Key idea of ML?', options: ['Pattern-based decisions', 'Hardcoded rules', 'Random output'], answer: 'Pattern-based decisions' },
+      { question: 'Which behavior is tracked?', options: ['Typing speed', 'Shoe size', 'Battery brand'], answer: 'Typing speed' },
+      { question: 'High backspace count may suggest?', options: ['Uncertainty', 'Perfect mastery', 'No activity'], answer: 'Uncertainty' },
+      { question: 'Idle time can suggest?', options: ['Distraction or overload', 'Completed mastery always', 'New account created'], answer: 'Distraction or overload' },
+      { question: 'Why track behavior?', options: ['To adapt support early', 'To remove quizzes', 'To make content random'], answer: 'To adapt support early' },
+      { question: 'A confused learner should receive?', options: ['Simpler support', 'A harder task immediately', 'No feedback'], answer: 'Simpler support' },
     ],
   },
   {
     id: 3,
-    title: 'Deep Learning',
+    title: 'Retention Review',
+    progressKey: 'Retention Review',
     level: 'advanced' as const,
-    content: `Deep Learning is an advanced form of Machine Learning that uses multi-layered neural networks to solve complex problems.\n\nKey Concepts:\n\n1. Deep Neural Networks\n   These have many hidden layers that can learn complex patterns.\n\n2. Automatic Feature Extraction\n   The system automatically identifies important features from data.\n\n3. High Accuracy\n   Works well with large datasets and complex tasks.\n\nWorking Process:\n* Input data (image, audio, text)\n* Pass through multiple layers\n* Extract high-level features\n* Generate prediction\n\nKey Idea:\nDeep learning can understand complex patterns without manual feature design.\n\nExample:\nUsed in self-driving cars, voice assistants, and face recognition.\n\nCode Concept:\nfunction deepLearning(input) {\n  return input\n    .map(x => x * 0.5)\n    .map(x => x + 1);\n}\n`,
-    simplified: 'Deep learning uses deep networks to model complex patterns from large data.',
+    outcome: 'Use quizzes and review decisions to improve knowledge retention over time.',
+    content: `Purpose\nThis module demonstrates retention optimization. The platform should not only help the learner finish one lesson. It should help them remember the concept later.\n\nRetention Strategy\nActive recall: ask the learner to remember before showing the answer.\nMastery tracking: update progress after each quiz.\nWeak area detection: identify topics below the target score.\nReview priority: send the learner back to topics most likely to be forgotten.\n\nProgress Logic\nIf quiz performance is strong, the learner can move to a challenge.\nIf performance is partial, the learner gets retrieval practice.\nIf performance is low, the learner receives simplified review content.\n\nMini Task\nTake the quiz and return to the dashboard. The progress bars and latest evidence will update from your result.`,
+    simplified: 'Retention improves when the app tests recall, tracks weak areas, and sends the learner back to review at the right time.',
+    retrieval: 'Why is active recall better than only rereading?',
+    challenge: 'Suggest one rule for deciding when a learner should review a topic again.',
+    misconception: 'Progress is not just lesson completion. Real progress means the learner can remember and apply the idea later.',
     quiz: [
-      { question: 'Deep learning uses?', options: ['Multi-layer networks', 'Decision trees', 'Linear equations'], answer: 'Multi-layer networks' },
-      { question: 'Automatic feature extraction means?', options: ['Learn features from data', 'Manually design features', 'No training'], answer: 'Learn features from data' },
-      { question: 'Deep learning works well with?', options: ['Large datasets', 'Tiny datasets', 'No data'], answer: 'Large datasets' },
-      { question: 'Example application?', options: ['Self-driving cars', 'Basic calculator', 'Text editor'], answer: 'Self-driving cars' },
-      { question: 'Hidden layers are used to?', options: ['Learn complex patterns', 'Store images', 'Collect data'], answer: 'Learn complex patterns' },
-      { question: 'High accuracy is achieved by?', options: ['Deep models', 'Random chance', 'No training'], answer: 'Deep models' },
-      { question: 'Input types include?', options: ['Image, audio, text', 'Only numbers', 'Only labels'], answer: 'Image, audio, text' },
-      { question: 'What is code concept doing?', options: ['Transforms input values', 'Sorts arrays', 'Creates UI'], answer: 'Transforms input values' },
-      { question: 'Deep learning reduces need for?', options: ['Manual feature design', 'Data collection', 'Model training'], answer: 'Manual feature design' },
-      { question: 'Which model type is deep learning?', options: ['Advanced AI model', 'Simple linear model', 'Static rule system'], answer: 'Advanced AI model' },
+      { question: 'What does retention mean?', options: ['Remembering later', 'Opening the app once', 'Changing colors'], answer: 'Remembering later' },
+      { question: 'What updates progress in this app?', options: ['Quiz evidence', 'Only scrolling', 'Only login'], answer: 'Quiz evidence' },
+      { question: 'Low quiz score should trigger?', options: ['Review content', 'Ignore the learner', 'Delete progress'], answer: 'Review content' },
+      { question: 'Active recall asks learners to?', options: ['Remember before seeing answers', 'Only reread silently', 'Skip practice'], answer: 'Remember before seeing answers' },
+      { question: 'The platform optimizes?', options: ['Retention and progress', 'Decoration only', 'Random lessons'], answer: 'Retention and progress' },
     ],
   },
 ];
@@ -74,8 +83,9 @@ export default function LearningPage() {
   const navigate = useNavigate();
   const { trackingData, cognitiveState } = useBehaviorTracking();
   const [activeLesson, setActiveLesson] = useState(0);
-  const [code, setCode] = useState('// Write your neural network code here\n\nfunction neuron(inputs, weights) {\n  let sum = 0;\n  for (let i = 0; i < inputs.length; i++) {\n    sum += inputs[i] * weights[i];\n  }\n  return sigmoid(sum);\n}\n');
+  const [code, setCode] = useState('Write your study response here.\n\nExample: This platform improves retention because it tracks behavior, detects engagement, and changes content based on learner needs.');
   const [showMessage, setShowMessage] = useState('');
+  const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({});
 
   const lesson = lessons[activeLesson];
 
@@ -98,14 +108,13 @@ export default function LearningPage() {
         navigate(`/learn/quiz/${lessons[activeLesson].id}`);
         break;
       case 'Get Hint':
-        setShowMessage('Hint: Focus on the highlighted key ideas in this lesson.');
+        setShowMessage(`Hint: ${lesson.misconception}`);
         break;
       case 'Simplify Content':
-        setShowMessage('Simplified summary: ' + lessons[activeLesson].simplified);
+        setShowMessage(`Simplified summary: ${lesson.simplified}`);
         break;
       case 'Next Challenge':
-        setActiveLesson((prev) => (prev + 1) % lessons.length);
-        setShowMessage('Next lesson loaded.');
+        setShowMessage(lesson.challenge);
         break;
       default:
         break;
@@ -117,7 +126,7 @@ export default function LearningPage() {
       const response = await learningApi.analyzeCode(code, lesson.id);
       const hint = response.data.hint || 'Code submitted. Keep practicing!';
       setShowMessage(hint);
-      toast.success('Code analysis received.');
+      toast.success('Response analysis received.');
     } catch (error) {
       const message =
         error?.response?.data?.message ||
@@ -127,29 +136,37 @@ export default function LearningPage() {
     }
   };
 
+  const toggleTask = (task: string) => {
+    const key = `${lesson.id}-${task}`;
+    setCompletedTasks((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const taskList = [
+    { label: 'Study the content', detail: lesson.outcome },
+    { label: 'Answer retrieval prompt', detail: lesson.retrieval },
+    { label: 'Complete adaptive task', detail: lesson.challenge },
+  ];
+
   return (
-    <div className="h-[calc(100vh-5rem)] flex gap-6 max-w-[1600px] mx-auto">
-      {/* LEFT: Learning Content */}
+    <div className="min-h-[calc(100vh-5rem)] flex flex-col gap-6 xl:h-[calc(100vh-5rem)] xl:flex-row max-w-[1600px] mx-auto">
       <div className="flex-1 flex flex-col gap-4 min-w-0 overflow-auto pr-2">
-        {/* Lesson Tabs */}
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 overflow-x-auto pb-1">
           {lessons.map((l, i) => (
             <button
               key={l.id}
               onClick={() => setActiveLesson(i)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
+              className={`flex min-w-fit items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
                 i === activeLesson
                   ? 'bg-primary/15 text-primary neon-border'
                   : 'bg-secondary text-muted-foreground hover:text-foreground'
               }`}
             >
-              <BookOpen className="w-4 h-4" />
-              {l.title.split(' ').slice(0, 3).join(' ')}
+              <ClipboardCheck className="w-4 h-4" />
+              {l.title}
             </button>
           ))}
         </div>
 
-        {/* Lesson Content */}
         <GlassCard className="flex-1 overflow-auto">
           <AnimatePresence mode="wait">
             <motion.div
@@ -159,27 +176,26 @@ export default function LearningPage() {
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-start gap-3 mb-5">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center border ${getStateColor()}`}>
-                  <BookOpen className="w-5 h-5" />
+                  <ClipboardCheck className="w-5 h-5" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold">{lesson.title}</h2>
-                  <span className="text-xs text-muted-foreground capitalize">{lesson.level}</span>
+                  <p className="mt-1 text-sm text-muted-foreground">{lesson.outcome}</p>
                 </div>
               </div>
-              <div className="prose prose-invert max-w-none text-sm leading-relaxed text-foreground/90 whitespace-pre-line">
+              <div className="prose prose-invert max-w-none text-sm leading-relaxed text-foreground/90 whitespace-pre-line prose-headings:text-foreground">
                 {lesson.content}
               </div>
             </motion.div>
           </AnimatePresence>
         </GlassCard>
 
-        {/* Code Editor */}
         <GlassCard className="shrink-0">
           <div className="flex items-center gap-2 mb-3">
             <Code className="w-4 h-4 text-accent" />
-            <span className="text-sm font-medium">Code Editor</span>
+            <span className="text-sm font-medium">Learner Response Box</span>
             <span className="text-xs text-muted-foreground ml-auto">Tracking typing behavior...</span>
           </div>
           <Textarea
@@ -189,19 +205,17 @@ export default function LearningPage() {
           />
           <div className="flex justify-end mt-3">
             <Button onClick={handleSubmitCode} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground glow-primary">
-              <Sparkles className="w-4 h-4 mr-1" /> Submit Code
+              <Sparkles className="w-4 h-4 mr-1" /> Analyze Response
             </Button>
           </div>
         </GlassCard>
       </div>
 
-      {/* RIGHT: AI Panel */}
-      <div className="w-80 shrink-0 flex flex-col gap-4 overflow-auto">
-        {/* Cognitive State */}
+      <div className="w-full xl:w-96 shrink-0 flex flex-col gap-4 overflow-auto">
         <GlassCard glow>
           <div className="flex items-center gap-2 mb-4">
             <Brain className={`w-5 h-5 animate-brain-pulse ${getStateColor().split(' ')[0]}`} />
-            <span className="text-sm font-semibold">AI Cognitive Monitor</span>
+            <span className="text-sm font-semibold">Cognitive Monitor</span>
           </div>
           <div className="space-y-4">
             <div>
@@ -224,7 +238,6 @@ export default function LearningPage() {
           </div>
         </GlassCard>
 
-        {/* Adaptive Message */}
         <GlassCard delay={0.1}>
           <div className="flex items-center gap-2 mb-3">
             <Lightbulb className="w-4 h-4 text-warning" />
@@ -250,9 +263,39 @@ export default function LearningPage() {
           {showMessage && <p className="mt-2 text-xs text-emerald-300">{showMessage}</p>}
         </GlassCard>
 
-        {/* Quick Actions */}
         <GlassCard delay={0.2}>
-          <p className="text-sm font-semibold mb-3">Quick Actions</p>
+          <p className="text-sm font-semibold mb-3 flex items-center gap-2">
+            <ListChecks className="h-4 w-4 text-primary" />
+            Lesson Evidence
+          </p>
+          <div className="space-y-2">
+            {taskList.map((task) => {
+              const key = `${lesson.id}-${task.label}`;
+              const checked = completedTasks[key];
+              return (
+                <button
+                  key={task.label}
+                  onClick={() => toggleTask(task.label)}
+                  className={`w-full rounded-lg border p-3 text-left transition-colors ${
+                    checked ? 'border-success/40 bg-success/10' : 'border-border bg-secondary/40 hover:bg-secondary'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className={`h-4 w-4 ${checked ? 'text-success' : 'text-muted-foreground'}`} />
+                    <span className="text-sm font-medium">{task.label}</span>
+                  </div>
+                  <p className="mt-1 pl-6 text-xs text-muted-foreground">{task.detail}</p>
+                </button>
+              );
+            })}
+          </div>
+        </GlassCard>
+
+        <GlassCard delay={0.25}>
+          <p className="text-sm font-semibold mb-3 flex items-center gap-2">
+            <TimerReset className="h-4 w-4 text-primary" />
+            Adaptive Actions
+          </p>
           <div className="space-y-2">
             {['Take a Quiz', 'Get Hint', 'Simplify Content', 'Next Challenge'].map((action) => (
               <button
