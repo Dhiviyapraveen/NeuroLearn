@@ -48,11 +48,6 @@ export default function AuthPage({ onLogin }: Props) {
     }
   };
 
-  const openDemo = () => {
-    onLogin('Demo Learner', 'demo@neurolearn.local', 'demo-token');
-    toast.success('Demo mode opened.');
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background px-4">
       <div className="absolute inset-0 bg-[linear-gradient(120deg,hsl(var(--background))_0%,hsl(var(--card))_55%,hsl(190_38%_10%)_100%)]" />
@@ -162,14 +157,6 @@ export default function AuthPage({ onLogin }: Props) {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </>
               )}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={openDemo}
-              className="w-full h-11"
-            >
-              Open HR Demo
             </Button>
           </form>
         </div>

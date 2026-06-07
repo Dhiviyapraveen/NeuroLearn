@@ -14,6 +14,16 @@ export function useAuth() {
     const token = localStorage.getItem('neuro_token');
     const name = localStorage.getItem('neuro_user_name');
     const email = localStorage.getItem('neuro_user_email');
+
+    if (token === 'demo-token' || email === 'demo@neurolearn.local') {
+      localStorage.removeItem('neuro_token');
+      localStorage.removeItem('neuro_user_name');
+      localStorage.removeItem('neuro_user_email');
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
     if (token && name && email) {
       setUser({ name, email, token });
     }

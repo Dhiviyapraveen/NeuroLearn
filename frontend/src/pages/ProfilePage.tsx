@@ -13,7 +13,9 @@ export default function ProfilePage({ userName }: { userName: string }) {
   }, []);
 
   const save = async () => {
-    await authApi.updateProfile(profile).then((res) => setProfile(res.data)).catch(() => toast.info('Profile saved locally in demo mode.'));
+    await authApi.updateProfile(profile)
+      .then((res) => setProfile(res.data))
+      .catch(() => toast.error('Unable to save profile. Please make sure you are logged in and the backend is available.'));
   };
 
   return (

@@ -47,7 +47,7 @@ export default function PlannerPage() {
       const res = await taskApi.create(draft);
       setTasks((prev) => prev.map((task) => task._id === localTask._id ? res.data : task));
     } catch {
-      toast.info('Saved locally for demo. Connect MongoDB to persist tasks.');
+      toast.error('Unable to save task. Please ensure you are logged in and the backend server is running.');
     }
   };
 
